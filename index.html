@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تقديم تيم أوسكار</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Tajawal,sans-serif;}
+
+body{
+background:linear-gradient(135deg,#0a0a0a,#111827,#000);
+color:white;
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+}
+
+.container{
+width:100%;
+max-width:600px;
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(10px);
+padding:30px;
+border-radius:20px;
+box-shadow:0 0 30px rgba(0,0,0,0.5);
+}
+
+h1{text-align:center;margin-bottom:10px;font-size:34px;color:#00ffd5;}
+p{text-align:center;margin-bottom:25px;color:#ccc;}
+
+input,select,textarea{
+width:100%;
+padding:14px;
+margin-bottom:15px;
+border:none;
+outline:none;
+border-radius:12px;
+background:#1f2937;
+color:white;
+font-size:16px;
+}
+
+textarea{resize:none;height:120px;}
+
+button{
+width:100%;
+padding:15px;
+border:none;
+border-radius:12px;
+background:#00ffd5;
+color:#000;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+transform:scale(1.03);
+background:#00c9aa;
+}
+
+.success{
+display:none;
+margin-top:15px;
+text-align:center;
+background:#16a34a;
+padding:12px;
+border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>🎬 تقديم تيم أوسكار</h1>
+<p>إذا عندك موهبة بالتصميم قدم الآن وانضم لنا</p>
+
+<form onsubmit="sendForm(event)">
+
+<input type="text" placeholder="اسمك الحقيقي" required>
+
+<input type="text" placeholder="اكتب يوزرك ديسكورد" required>
+
+<input type="text" placeholder="اكتب يوزرك تيك توك" required>
+
+<!-- تم التعديل هنا -->
+<input type="text" placeholder="عمرك (رقمين فقط)" maxlength="2" pattern="[0-9]{2}" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,2)" required>
+
+<select required>
+<option value="">اختر نوعك</option>
+<option>مصمم</option>
+<option>مسؤول</option>
+</select>
+
+<textarea placeholder="ليش تبغى تدخل تيم أوسكار؟" required></textarea>
+
+<button type="submit">🚀 إرسال التقديم</button>
+</form>
+
+<div class="success" id="msg">
+✅ تم إرسال تقديمك بنجاح
+</div>
+</div>
+
+<script>
+function sendForm(e){
+e.preventDefault();
+
+const webhook = "https://discord.com/api/webhooks/1499024921437802538/zEturRQIYMmkL_65uS3QyPEClk_pgAlZiIWc1Qxq4elLsaz4YYI2k7HO1wo0kS0w9Con";
+
+const inputs = document.querySelectorAll("input");
+
+const name = inputs[0].value;
+const discord = inputs[1].value;
+const tiktok = inputs[2].value;
+const age = inputs[3].value;
+const role = document.querySelector("select").value;
+const reason = document.querySelector("textarea").value;
+
+// تحقق إن العمر رقمين فقط
+if(!/^[0-9]{2}$/.test(age)){
+alert("العمر ");
+return;
+}
+
+fetch(webhook,{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body: JSON.stringify({
+  username: "Oscar Apply Bot",
+  embeds: [
+    {
+      title: "📥 تقديم جديد - تيم أوسكار",
+      description: "تم استلام تقديم جديد 👇",
+      color: 0xff0000,
+
+      fields: [
+        { name: "👤 الاسم الحقيقي", value: `\`\`\`${name}\`\`\`` },
+        { name: "🎮 ديسكورد", value: `\`\`\`${discord}\`\`\`` },
+        { name: "🎵 تيك توك", value: `\`\`\`${tiktok}\`\`\`` },
+        { name: "🎂 العمر", value: `\`\`\`${age}\`\`\`` },
+        { name: "📌 النوع", value: `\`\`\`${role}\`\`\`` },
+        { name: "❓ السبب", value: `\`\`\`${reason}\`\`\`` }
+      ],
+
+      footer: { text: "Team Oscar • Application System" },
+      timestamp: new Date()
+    }
+  ]
+})
+})
+.then(res=>{
+if(res.ok){
+document.getElementById("msg").style.display="block";
+}else{
+alert("صار خطأ بالإرسال");
+}
+})
+.catch(()=>{
+alert("فشل الاتصال بالديسكورد");
+});
+}
+</script>
+
+</body>
+</html>
